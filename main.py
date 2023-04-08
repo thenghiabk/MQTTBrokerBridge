@@ -47,22 +47,18 @@ class MqttForwarder:
         self.dest_client_id = config.get('destination', 'client_id')
         self.dest_topic = config.get('destination', 'topic')
 
-        self.logger.info(self.src_broker)
-        self.logger.info(self.src_port)
-        self.logger.info(self.src_client_id)
-        self.logger.info(self.src_topic)
-
-        self.logger.info(self.dest_broker)
-        self.logger.info(self.dest_port)
-        self.logger.info(self.dest_client_id)
-        self.logger.info(self.dest_topic)
+        # Display config params for debugging
+        self.logger.info(f"Subscriber's Params")
+        self.logger.info(f"Broker: `{self.src_broker}` | Port: `{self.src_port}` | Client ID: `{self.src_client_id}` | Topic: `{self.src_topic}`")
+        self.logger.info(f"Publisher's Params")
+        self.logger.info(f"Broker: `{self.dest_broker}` | Port: `{self.dest_port}` | Client ID: `{self.dest_client_id}` | Topic: `{self.dest_topic}`")
 
     def on_src_connect(self, client, userdata, flags, rc):
         if rc == 0:
-            print("Connected to source MQTT Broker")
+            self.logger.info(f"Connected to source MQTT Broker")
             self.src_client.subscribe(self.src_topic)
         else:
-            print(f"Failed to connect to source MQTT Broker, return code {rc}")
+            self.logger.info(f"Failed to connect to source MQTT Broker, return code `{rc}`")
             sys.exit(1)
 
     def on_src_message(self, client, userdata, message):
@@ -75,9 +71,9 @@ class MqttForwarder:
 
     def on_dest_connect(self, client, userdata, flags, rc):
         if rc == 0:
-            print("Connected to destination MQTT Broker")
+            self.logger.info(f"Connected to destination MQTT Broker")
         else:
-            print(f"Failed to connect to destination MQTT Broker, return code {rc}")
+            self.logger.info(f"Failed to connect to destination MQTT Broker, return code `{rc}`")
             sys.exit(1)
 
     def run(self):
