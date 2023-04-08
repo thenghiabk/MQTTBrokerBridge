@@ -9,6 +9,7 @@ import paho.mqtt.client as mqtt
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
+
 class MqttForwarder:
     def __init__(self, config_path):
         self.config_path = config_path
@@ -98,13 +99,14 @@ class MqttForwarder:
         self.src_client.loop_start()
         self.dest_client.loop_start()
 
-        while True:
-            try:
+        try:
+            while True:
+                # time.sleep(1)
                 pass
-            except KeyboardInterrupt:
-                self.logger.info("Stopping...")
-                self.src_client.loop_stop()
-                self.dest_client.loop_stop()
+        except KeyboardInterrupt:
+            self.logger.info("Stopping...")
+            self.src_client.loop_stop()
+            self.dest_client.loop_stop()
 
 
 if __name__ == '__main__':
